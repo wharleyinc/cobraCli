@@ -21,9 +21,9 @@ import (
 	"github.com/spf13/cobra"
 )
 
-// checkBalanceCmd represents the checkBalance command
-var checkBalanceCmd = &cobra.Command{
-	Use:   "checkBalance",
+// createCmd represents the create command
+var createCmd = &cobra.Command{
+	Use:   "create",
 	Short: "A brief description of your command",
 	Long: `A longer description that spans multiple lines and likely contains examples
 and usage of using your command. For example:
@@ -32,58 +32,37 @@ Cobra is a CLI library for Go that empowers applications.
 This application is a tool to generate the needed files
 to quickly create a Cobra application.`,
 	Run: func(cmd *cobra.Command, args []string) {
-		checkBalance(args)
-		fmt.Println("checkBalance called")
+		create(args)
+		fmt.Println("create called")
 	},
 }
 
 func init() {
-	rootCmd.AddCommand(checkBalanceCmd)
+	rootCmd.AddCommand(createCmd)
 
 	// Here you will define your flags and configuration settings.
 
 	// Cobra supports Persistent Flags which will work for this command
 	// and all subcommands, e.g.:
-	// checkBalanceCmd.PersistentFlags().String("foo", "", "A help for foo")
+	// createCmd.PersistentFlags().String("foo", "", "A help for foo")
 
 	// Cobra supports local flags which will only run when this command
 	// is called directly, e.g.:
-	// checkBalanceCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
+	// createCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 }
 
-func checkBalance(args []string)  {
+func create(args []string)  {
 
 	username := args[0]
-
+	password := args[1]
 	fmt.Println("username supplied is: " + username)
-	fmt.Println("\n\n\n attempting to check balance for user: " + username + " ...")
+	fmt.Println("password supplied is: " + password)
 
-	customer, err := database.FindCustomer(username)
+	customer, err := database.CreateCustomer(username, password)
 	if err != nil {
-		fmt.Println("User with "+ username + " cannot be found")
+		fmt.Println("User with "+ username + "already exist. please login ")
 		return
 	}
-
-	if customer.LoginStatus {
-		fmt.Printf("Current Account Balance for User %s  is : %0.2f\n", customer.Username, customer.Balance)
-		return
-	} else {
-		fmt.Println("You need to login again.")
-		return
-	}
-
-/*	for _, a := range models.Customers {
-		if a.Username == username {
-			if a.LoginStatus {
-				fmt.Printf("Current Account Balance for User %s  is : %0.2f\n", a.Username, a.Balance)
-			} else {
-				fmt.Println("You're not logged. try again later")
-				return
-			}
-		} else {
-			fmt.Println("Username not found. kindly retry")
-			return
-		}
-	}*/
+	fmt.Println(customer.Username + ": Welcome to Wale's CLI using Cobra c/o Segun Mustapha")
 
 }

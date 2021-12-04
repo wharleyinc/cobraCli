@@ -16,7 +16,7 @@ limitations under the License.
 package cmd
 
 import (
-	"cobraCli/models"
+	"cobraCli/database"
 	"fmt"
 
 	"github.com/spf13/cobra"
@@ -62,7 +62,18 @@ func checkHistory(args []string)  {
 	fmt.Println("\n\n\n attempting to check transation history for user: " + username + " ...")
 
 
-	for _, a := range models.Customers {
+	customer, err := database.FindCustomer(username)
+	if err != nil {
+		fmt.Println("User with "+ username + " cannot be found")
+		return
+	}
+	for _, b := range customer.Transactions {
+		fmt.Println(b)
+		sum += int(b.Amount)
+	}
+	fmt.Printf("Current Account Balance for User %s  is : %0.2f\n", customer.Username, sum)
+
+	/*for _, a := range models.Customers {
 		if a.Username == username {
 			if a.LoginStatus {
 				for _, b := range a.Transactions {
@@ -78,6 +89,6 @@ func checkHistory(args []string)  {
 			fmt.Println("Username not found. kindly retry")
 			return
 		}
-	}
+	}*/
 
 }

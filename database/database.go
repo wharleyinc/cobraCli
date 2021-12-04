@@ -70,7 +70,10 @@ func CreateCustomer(username, password string) (*Customer, error) {
 		var newCustomer Customer
 		newCustomer.Username = strings.ToLower(username)
 		newCustomer.Balance = 0
+		newCustomer.Password = password
 		newCustomer.Transactions = []Transaction{}
+		newCustomer.LoginStatus = false
+		newCustomer.DateModified = time.Now()
 		customers, err := GetCustomers()
 		if err == nil {
 			customers = append(customers, newCustomer)
@@ -81,7 +84,7 @@ func CreateCustomer(username, password string) (*Customer, error) {
 	return customer, err
 }
 func UpdateCustomer(customer *Customer) {
-	// Update the json with this modified user information
+	// Update the json with this modified customer information
 	customers, err := GetCustomers()
 	if err == nil {
 		for i := 0; i < len(customers); i++ {

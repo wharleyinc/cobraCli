@@ -16,7 +16,10 @@ limitations under the License.
 package cmd
 
 import (
+	"cobraCli/database"
 	"fmt"
+	"strconv"
+	"time"
 
 	"github.com/spf13/cobra"
 )
@@ -32,6 +35,7 @@ Cobra is a CLI library for Go that empowers applications.
 This application is a tool to generate the needed files
 to quickly create a Cobra application.`,
 	Run: func(cmd *cobra.Command, args []string) {
+		payBill(args)
 		fmt.Println("payBill called")
 	},
 }
@@ -48,4 +52,84 @@ func init() {
 	// Cobra supports local flags which will only run when this command
 	// is called directly, e.g.:
 	// payBillCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
+}
+
+func payBill(args []string)  {
+
+	var balance1, balance2 float64
+	var transaction1, transaction2 database.Transaction
+	payingUsername := args[0]
+	amount := args[1]
+	receiverUsername := args[2]
+
+	newAmount, err := strconv.ParseFloat(amount, 64)
+	if err != nil {
+		fmt.Println("please enter valid amount in digits")
+		return
+	}
+
+	customer1, err := database.FindCustomer(payingUsername)
+	if err != nil {
+		fmt.Println("User with "+ payingUsername + " cannot be found")
+		return
+	}
+	customer2, err := database.FindCustomer(receiverUsername)
+	if err != nil {
+		fmt.Println("User with "+ receiverUsername + " cannot be found")
+		return
+	}
+
+	fmt.Println("payingUsername supplied is: " + payingUsername)
+	fmt.Println("receiverUsername supplied is: " + receiverUsername)
+	fmt.Printf("\n\n\n attempting to transfer from  user: %s to  user %s. ", payingUsername, receiverUsername)
+
+	transaction1.Transaction = database.TransactionTypeDebit
+	transaction1.Amount = newAmount
+	transaction1.DateCaptured = time.Now()
+	balance1 = customer1.Balance - newAmount
+	fmt.Printf("new balance for %s  is: %0.2f", payingUsername, balance1)
+	// add transaction to Customer object 1
+	customer1.Transactions = append(customer1.Transactions, transaction1)
+	database.UpdateCustomer(customer1)
+
+	// compute a transaction object 2
+	transaction2.Transaction = database.TransactionTypeCredit
+	transaction2.Amount = newAmount
+	transaction2.DateCaptured = time.Now()
+	balance2 = customer2.Balance - newAmount
+	fmt.Printf("new balance for %s  is: %0.2f", receiverUsername, balance2)
+	// add transaction to Customer object 1
+	customer2.Transactions = append(customer2.Transactions, transaction2)
+	database.UpdateCustomer(customer2)
+	return
+
+
+	/*for i := 0; i < len(models.Customers); i++ {
+		if models.Customers[i].Username == payingUsername {
+			for j := i + 1; j < len(models.Customers); j++ {
+				if models.Customers[j].Username == receiverUsername {
+					// compute a transaction object 1
+					transaction1.Transaction = models.TransactionTypeDebit
+					transaction1.Amount = newAmount
+					transaction1.DateCaptured = time.Now()
+					balance1 = models.Customers[i].Balance - newAmount
+					fmt.Printf("new balance for %s  is: %0.2f", payingUsername, balance1)
+					// add transaction to Customer object 1
+					models.Customers[i].Transactions = append(models.Customers[i].Transactions, transaction1)
+
+					// compute a transaction object 2
+					transaction2.Transaction = models.TransactionTypeCredit
+					transaction2.Amount = newAmount
+					transaction2.DateCaptured = time.Now()
+					balance2 = models.Customers[j].Balance + newAmount
+					fmt.Printf("new balance for %s  is: %0.2f", receiverUsername, balance2)
+					// add transaction to Customer object 1
+					models.Customers[i].Transactions = append(models.Customers[i].Transactions, transaction1)
+					return
+				}
+			}
+		}
+		fmt.Println("credentials entered are incorrect. try again")
+	}*/
+
 }

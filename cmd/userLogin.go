@@ -16,8 +16,9 @@ limitations under the License.
 package cmd
 
 import (
-	"cobraCli/models"
+	"cobraCli/database"
 	"fmt"
+	"strings"
 
 	"github.com/spf13/cobra"
 )
@@ -58,7 +59,23 @@ func login(args []string)  {
 	fmt.Println("username supplied is: " + username)
 	fmt.Println("password supplied is: " + password)
 
+	customer, err := database.FindCustomer(username)
+	if err != nil {
+		fmt.Println("User with "+ username + " cannot be found")
+		return
+	}
 
+	if strings.EqualFold(customer.Password, password) {
+		fmt.Println("login is successful")
+		fmt.Println(username + ": Welcome to Wale's CLI using Cobra c/o Segun Mustapha")
+		return
+	} else {
+		fmt.Println("incorrect password.")
+		return
+	}
+	fmt.Println("login unsuccessful. try again later")
+	return
+/*
 	for _, a := range models.Customers {
 		if a.Username == username {
 			if a.Password == password {
@@ -70,6 +87,6 @@ func login(args []string)  {
 				return
 			}
 		}
-	}
+	}*/
 
 }

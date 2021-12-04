@@ -16,7 +16,7 @@ limitations under the License.
 package cmd
 
 import (
-	"cobraCli/models"
+	"cobraCli/database"
 	"fmt"
 	"strconv"
 	"time"
@@ -57,7 +57,7 @@ func init() {
 func fundTransfer(args []string)  {
 
 	var balance1, balance2 float64
-	var transaction1, transaction2 models.TransactionHistory
+	var transaction1, transaction2 database.Transaction
 	payingUsername := args[0]
 	amount := args[1]
 	receiverUsername := args[2]
@@ -65,13 +65,44 @@ func fundTransfer(args []string)  {
 	newAmount, err := strconv.ParseFloat(amount, 64)
 	if err != nil {
 		fmt.Println("please enter valid amount in digits")
+		return
+	}
+
+	customer1, err := database.FindCustomer(payingUsername)
+	if err != nil {
+		fmt.Println("User with "+ payingUsername + " cannot be found")
+		return
+	}
+	customer2, err := database.FindCustomer(receiverUsername)
+	if err != nil {
+		fmt.Println("User with "+ receiverUsername + " cannot be found")
+		return
 	}
 
 	fmt.Println("payingUsername supplied is: " + payingUsername)
 	fmt.Println("receiverUsername supplied is: " + receiverUsername)
 	fmt.Printf("\n\n\n attempting to transfer from  user: %s to  user %s. ", payingUsername, receiverUsername)
 
-	for i := 0; i < len(models.Customers); i++ {
+	transaction1.Transaction = database.TransactionTypeDebit
+	transaction1.Amount = newAmount
+	transaction1.DateCaptured = time.Now()
+	balance1 = customer1.Balance - newAmount
+	fmt.Printf("new balance for %s  is: %0.2f", payingUsername, balance1)
+	// add transaction to Customer object 1
+	customer1.Transactions = append(customer1.Transactions, transaction1)
+
+	// compute a transaction object 2
+	transaction2.Transaction = database.TransactionTypeCredit
+	transaction2.Amount = newAmount
+	transaction2.DateCaptured = time.Now()
+	balance2 = customer2.Balance - newAmount
+	fmt.Printf("new balance for %s  is: %0.2f", receiverUsername, balance2)
+	// add transaction to Customer object 1
+	customer2.Transactions = append(customer2.Transactions, transaction2)
+	return
+
+
+	/*for i := 0; i < len(models.Customers); i++ {
 		if models.Customers[i].Username == payingUsername {
 			for j := i + 1; j < len(models.Customers); j++ {
 				if models.Customers[j].Username == receiverUsername {
@@ -97,7 +128,7 @@ func fundTransfer(args []string)  {
 			}
 		}
 		fmt.Println("credentials entered are incorrect. try again")
-	}
+	}*/
 
 }
 
