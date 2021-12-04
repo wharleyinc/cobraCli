@@ -9,7 +9,7 @@ import (
 
 // Customer represents data about a customer.
 type Customer struct {
-	//ID     string  `json:"id"`
+	//ID     string  `json:"id"`	// not re
 	Username  string  `json:"username"`
 	Password string  `json:"password"`
 	Balance  float64 `json:"balance"`
