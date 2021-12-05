@@ -26,13 +26,12 @@ import (
 // userLoginCmd represents the userLogin command
 var userLoginCmd = &cobra.Command{
 	Use:   "userLogin",
-	Short: "A brief description of your command",
-	Long: `A longer description that spans multiple lines and likely contains examples
-and usage of using your command. For example:
+	Short: "A command to access the banking app cli",
+	Long: `You're required to pass in your valid username and password,
+so as to authenticate your identity on the banking app cli.
+This should return a success/fail message'
 
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
+#usage: cobraCli userLogin <username> <space> <password>`,
 	Run: func(cmd *cobra.Command, args []string) {
 		login(args)
 	},
@@ -75,18 +74,5 @@ func login(args []string)  {
 	}
 	fmt.Println("login unsuccessful. try again later")
 	return
-/*
-	for _, a := range models.Customers {
-		if a.Username == username {
-			if a.Password == password {
-				a.LoginStatus = true
-				fmt.Println("login is successful")
-				fmt.Println(username + ": Welcome to Wale's CLI using Cobra c/o Segun Mustapha")
-			} else {
-				fmt.Println("login unsuccessful. try again later")
-				return
-			}
-		}
-	}*/
-
+/
 }

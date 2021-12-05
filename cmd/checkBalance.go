@@ -24,16 +24,14 @@ import (
 // checkBalanceCmd represents the checkBalance command
 var checkBalanceCmd = &cobra.Command{
 	Use:   "checkBalance",
-	Short: "A brief description of your command",
-	Long: `A longer description that spans multiple lines and likely contains examples
-and usage of using your command. For example:
-
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
+	Short: "A quick command to check customer's account balance",
+	Long: `This command checks for a customer's balance passing in the username. 
+This will be successful only if the username is valid and customer is logged in.
+This should return an account balance message.
+#usage: cobraCli checkBalance <username>`,
 	Run: func(cmd *cobra.Command, args []string) {
 		checkBalance(args)
-		fmt.Println("checkBalance called")
+		// fmt.Println("checkBalance called")	// code clean-up
 	},
 }
 
@@ -71,19 +69,4 @@ func checkBalance(args []string)  {
 		fmt.Println("You need to login again.")
 		return
 	}
-
-/*	for _, a := range models.Customers {
-		if a.Username == username {
-			if a.LoginStatus {
-				fmt.Printf("Current Account Balance for User %s  is : %0.2f\n", a.Username, a.Balance)
-			} else {
-				fmt.Println("You're not logged. try again later")
-				return
-			}
-		} else {
-			fmt.Println("Username not found. kindly retry")
-			return
-		}
-	}*/
-
 }

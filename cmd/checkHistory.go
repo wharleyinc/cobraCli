@@ -25,16 +25,15 @@ import (
 // checkHistoryCmd represents the checkHistory command
 var checkHistoryCmd = &cobra.Command{
 	Use:   "checkHistory",
-	Short: "A brief description of your command",
-	Long: `A longer description that spans multiple lines and likely contains examples
-and usage of using your command. For example:
+	Short: "A quick command to check transactions history",
+	Long: `This command checks and returns the history of a customer's transactions, passing in the username. 
+This will be successful only if the username is valid.
+This should return a list of transactions done on the csutomer's account balance.
 
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
+#usage: cobraCli checkHistory <username>`,
 	Run: func(cmd *cobra.Command, args []string) {
 		checkHistory(args)
-		fmt.Println("checkHistory called")
+		// fmt.Println("checkHistory called")		// code clean-up
 	},
 }
 
@@ -72,23 +71,4 @@ func checkHistory(args []string)  {
 		sum += int(b.Amount)
 	}
 	fmt.Printf("Current Account Balance for User %s  is : %0.2f\n", customer.Username, sum)
-
-	/*for _, a := range models.Customers {
-		if a.Username == username {
-			if a.LoginStatus {
-				for _, b := range a.Transactions {
-					fmt.Println(b)
-					sum += int(b.Amount)
-				}
-				fmt.Printf("Current Account Balance for User %s  is : %0.2f\n", a.Username, sum)
-			} else {
-				fmt.Println("You're not logged. try again later")
-				return
-			}
-		} else {
-			fmt.Println("Username not found. kindly retry")
-			return
-		}
-	}*/
-
 }

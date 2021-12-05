@@ -27,16 +27,16 @@ import (
 // payBillCmd represents the payBill command
 var payBillCmd = &cobra.Command{
 	Use:   "payBill",
-	Short: "A brief description of your command",
-	Long: `A longer description that spans multiple lines and likely contains examples
-and usage of using your command. For example:
+	Short: "Command to pay Bills",
+	Long: `This command initiates a fund transfer for bills from customer's account
+ to another customer's account, identified by their usernames.
+ This will be successful only if the usernames are in the datastore.
+This should return a success message.
 
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
+#usage: cobraCli payBill <source account username> <space> <amount> <space> <destination account username>`,
 	Run: func(cmd *cobra.Command, args []string) {
 		payBill(args)
-		fmt.Println("payBill called")
+		// fmt.Println("payBill called")		// code clean-up
 	},
 }
 
@@ -103,33 +103,5 @@ func payBill(args []string)  {
 	database.UpdateCustomer(customer2)
 	return
 
-
-	/*for i := 0; i < len(models.Customers); i++ {
-		if models.Customers[i].Username == payingUsername {
-			for j := i + 1; j < len(models.Customers); j++ {
-				if models.Customers[j].Username == receiverUsername {
-					// compute a transaction object 1
-					transaction1.Transaction = models.TransactionTypeDebit
-					transaction1.Amount = newAmount
-					transaction1.DateCaptured = time.Now()
-					balance1 = models.Customers[i].Balance - newAmount
-					fmt.Printf("new balance for %s  is: %0.2f", payingUsername, balance1)
-					// add transaction to Customer object 1
-					models.Customers[i].Transactions = append(models.Customers[i].Transactions, transaction1)
-
-					// compute a transaction object 2
-					transaction2.Transaction = models.TransactionTypeCredit
-					transaction2.Amount = newAmount
-					transaction2.DateCaptured = time.Now()
-					balance2 = models.Customers[j].Balance + newAmount
-					fmt.Printf("new balance for %s  is: %0.2f", receiverUsername, balance2)
-					// add transaction to Customer object 1
-					models.Customers[i].Transactions = append(models.Customers[i].Transactions, transaction1)
-					return
-				}
-			}
-		}
-		fmt.Println("credentials entered are incorrect. try again")
-	}*/
 
 }
