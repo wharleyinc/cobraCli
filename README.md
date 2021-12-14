@@ -1,4 +1,4 @@
-Banking app done using Cobra CLI - Segsalerty challenge c/o Segun Mustapha
+Banking app done using Cobra CLI - Segsalerty challenge c/o Segun Mustafa
 
 It uses a database.json file as datastore for queries - createCustomer, UpdateCustomer, FindCustomer, GetCustomers.
 
@@ -32,4 +32,4 @@ Added short and long descriptions to the commands. 05/12/2021
 ** Add flags to filter transactions history query results.
 etc.
 
-Thanks to `Segun Mustapha`for the challenge and inspiration.
+Thanks to `Segun Mustafa`for the challenge and inspiration.
